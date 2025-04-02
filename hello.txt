@@ -1,2 +1,7 @@
 신기능 추가zsasdalalalala
+<<<<<<< HEAD
 breanch develop
+=======
+branch
+branch test1
+>>>>>>> breanchtest
