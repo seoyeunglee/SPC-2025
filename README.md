@@ -1,5 +1,6 @@
 hello world !
 Goodbye world
+mine1 추가추가추가
 <<<<<<< HEAD
 byebye
 =======
