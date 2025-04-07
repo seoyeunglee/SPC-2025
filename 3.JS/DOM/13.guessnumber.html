@@ -11,26 +11,36 @@
     <input type="number" id="guessNumber" placeholder="숫자를 입력하시오">
     <button id="guessButton" onclick="guessBtn()">Guess</button>
     <p id="result"></p>
+    <ol id="history"></ol>
 
     <script>
        var randomNum = Math.floor(Math.random()*100) + 1;
+       console.log("랜덤숫자: ",randomNum);
 
         function guessBtn(){
-            
-            console.log(randomNum);
             var guessNum = Number(document.getElementById("guessNumber").value);
+            console.log("사용자입력: ",guessNum);
             const result = document.getElementById('result');
-
+            const history = document.getElementById('history');
+            
             if(guessNum>0 && guessNum<randomNum){
-                result.innerText="그것보다는 큼";
+                result.innerHTML="<B>그것보다는 큼</B>";
             }else if(guessNum<101 && guessNum>randomNum){
-                result.innerText="그것보다는 작음";
+                result.innerHTML="그것보다는 작음";
             }else if(randomNum == guessNum){
-                result.innerText="축하합니다! 맞추셨습니다!";
+                result.innerHTML='<B style="color:red">축하합니다! 맞추셨습니다!</B>';
             }else{
-                result.innerText="1에서 100 사이의 숫자를 입력해주세요";
+                result.innerHTML="1에서 100 사이의 숫자를 입력해주세요";
             }
+
+            result.innerText = '${result.innerHTML}';
+
+            const newResult = document.createElement("li");
+            newResult.innerHTML = "<B style='color:green'>"+ guessNum + ", " + result.innerText +"</B>";
+            history.appendChild(newResult);
         }
+
     </script>
+
 </body>
 </html>

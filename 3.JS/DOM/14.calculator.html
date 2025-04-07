@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>계산기</title>
+    <style>
+        .calculator{
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+            max-width: 300px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .calculator input{
+            grid-column: span 4;
+            padding: 10px;
+            font-size: 18px;
+            background-color: aliceblue;
+        }
+        .calculator button{
+            padding: 10px;
+            font-size: 18px;
+            background-color: aliceblue;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" readonly="readonly" id="result">
+        
+        <button onclick="clickSymbol(this.innerText)">+</button>
+        <button onclick="clickSymbol(this.innerText)">-</button>
+        <button onclick="clickSymbol(this.innerText)">*</button>
+        <button onclick="clickSymbol(this.innerText)">/</button>
+
+        <button onclick="clickNumber(7)">7</button>
+        <button onclick="clickNumber(8)">8</button>
+        <button onclick="clickNumber(9)">9</button>
+        <button onclick="clickSymbol(this.innerText)">=</button>
+
+        <button onclick="clickNumber(4)">4</button>
+        <button onclick="clickNumber(5)">5</button>
+        <button onclick="clickNumber(6)">6</button>
+        <button onclick="clickSymbol(this.innerText)">C</button>
+
+        <button onclick="clickNumber(1)">1</button>
+        <button onclick="clickNumber(2)">2</button>
+        <button onclick="clickNumber(3)">3</button>
+        <button onclick="clickNumber(0)">0</button>
+    </div>
+
+    <script>
+        function clickNumber(value){
+            // 숫자를 입력해서 입력창에 표시
+            const inputBox = document.getElementById('result');
+            inputBox.value += value;
+        }
+
+        function clickSymbol(){
+            // 심볼은 하나만 입력되어야 함. 이전 문자 확인. 숫자가 있을 때만 심볼 추가됨.
+
+            // 실제로 연산 해보기 
+
+            // 에러처리
+        }
+    </script>
+
+
+</body>
+</html>
