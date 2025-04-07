@@ -36,13 +36,49 @@
     </style>
 </head>
 <body>
-    <div id="dragItems">
-        <div id="dragItem1" draggable="true">Drag Me</div>
-        <div id="dragItem2" draggable="true">Drag Me</div>
-        <div id="dragItem3" draggable="true">Drag Me</div>
-        <div id="dropZone">Drop here</div>
-        
+    <body>
+        <div id="dragItems">
+            <div id="dragItem1" class="drag-item" draggable="true">Drag Me 1</div>
+            <div id="dragItem2" class="drag-item" draggable="true">Drag Me 2</div>
+            <div id="dragItem3" class="drag-item" draggable="true">Drag Me 3</div>
+            <div id="dropZone" style="margin-top: 20px; border: 2px dashed #ccc; padding: 10px;">Drop here</div>
+        </div>
+    
+        <script>
+            const dragItems = document.querySelectorAll('.drag-item');
+            const dropZone = document.getElementById('dropZone');
+    
+            // 드래그 시작: 어떤 요소인지 기억시킴
+            dragItems.forEach(item => {
+                item.addEventListener('dragstart', function(event) {
+                    console.log('드래그 시작:', event.target.id);
+                    event.dataTransfer.setData('text/plain', event.target.id);
+                });
+            });
+    
+            // 드래그 중: 기본 동작 막기
+            dropZone.addEventListener('dragover', function(event) {
+                event.preventDefault();
+                console.log("내 위에 객체 있음");
+            });
+    
+            // 드롭 처리
+            dropZone.addEventListener('drop', function(event) {
+                event.preventDefault();
+                const draggedId = event.dataTransfer.getData('text/plain');
+                const draggedItem = document.getElementById(draggedId);
+    
+                // 유효한 요소인지 확인 후 추가
+                if (draggedItem && draggedItem.classList.contains('drag-item')) {
+                    console.log("드롭 발생:", draggedId);
+                    dropZone.appendChild(draggedItem);
+                }
+            });
+        </script>
+    </body>
+    
 
-    </div>
+    </script>
+
 </body>
 </html>
