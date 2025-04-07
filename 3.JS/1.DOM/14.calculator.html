@@ -60,7 +60,12 @@
 
         function clickSymbol(){
             // 심볼은 하나만 입력되어야 함. 이전 문자 확인. 숫자가 있을 때만 심볼 추가됨.
-
+            const inputBox = document.getElementById('result').value;
+            if(/\d/.test(inputBox)){
+                alert("숫자가 들어있어요!");
+            }else{
+                alert("숫자가 없어요");
+            }
             // 실제로 연산 해보기 
 
             // 에러처리

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        console.log("Hello, Head");
+    </script>
+</head>
+<body>
+    <script>
+        // 1. OLD스타일
+        // function myhandler{
+        //     console.log("DOM 로딩 완료");
+        // }
+        // document.addEventListener('DOMContentLoaded', myhandler);
+        // console.log("Hello, Body");
+
+        // 2. 일반 익명 함수 스타일
+        // document.addEventListener('DOMContentLoaded', function(){
+        //     console.log("DOM로딩 완료")
+        // });
+
+        // 3-1. 모던 JS의 한줄짜리 화살표 함수 표현법
+        // document.addEventListener('DOMContentLoaded', () => console.log("DOM로딩 완료"));
+
+        // 3-2. 모던 JS의멀티라인 화살표랑 표현법
+        // 
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOM로딩완료");
+        });
+
+    </script>
+</body>
+</html>
