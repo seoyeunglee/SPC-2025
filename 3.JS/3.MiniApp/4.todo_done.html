@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .done{
+            text-decoration: line-through;
+            color: gray;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>투두(todo) 리스트</h1>
+    <input type="text" placeholder="할 일 추가" id="todo">
+    <button id="add-todo">Add</button>
+    <hr>
+    <ul id="todo-list"></ul>
+
+    <script>
+        const addBtn = document.getElementById('add-todo');
+
+        addBtn.addEventListener('click', () => {
+            let inputBox = document.getElementById('todo');
+
+            const todoList = document.getElementById('todo-list');
+
+            if (inputBox.value.trim() === '') return;
+
+            const new_li = document.createElement('li');
+            // new_li.textContent = inputBox.value;
+            new_li.innerHTML = `${inputBox.value} <button class="delete">삭제</button>`;
+
+            todoList.appendChild(new_li);
+
+            document.getElementById('todo').value = ""; // 원본을 바꿔야한다. 화면에 있는 DOM 요소!!
+
+            // 완료 기능 구현 하기
+            // 각 요소마다 클릭 가능한 이벤트를 추가한다
+            // 각 요소를 클릭했을 떄 디자인 속성을 추가(done)
+
+            // const deleteBtn = document.createElement('button');
+            // deleteBtn.textContent = '삭제';
+            // deleteBtn.style.marginLeft = '10px';
+            // deleteBtn.addEventListener('click', function () {
+            //     new_li.remove();
+            // });
+            // new_li.appendChild(deleteBtn);
+
+
+            new_li.addEventListener('click', () => {
+                new_li.classList.toggle('done');
+                console.log("클릭")
+            });
+
+        });
+
+
+
+        document.getElementById('todo').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                document.getElementById('add-todo').click();
+            }
+        });
+    </script>
+</body>
+
+</html>
