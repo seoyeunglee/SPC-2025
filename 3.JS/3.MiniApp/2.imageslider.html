@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .slider{
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+            align-items: center;
+        }
+        .slider img{
+            width: 200px;
+            height: 200px;
+            display: none;
+        }
+        .slider img.active{
+            display: block;
+        }
+        .buttons{
+            margin-top: 10px;
+        }
+        button{
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>이미지 슬라이더</h1>
+    <div class="slider">
+        <img src="images/cat1.jpg" alt="고양이1" id="cat1" class="active">
+        <img src="images/cat2.jpg" alt="고양이2" id="cat2">
+        <img src="images/cat3.jpg" alt="고양이3" id="cat3">
+    </div>
+    <div class="filename" id="filename">images/cat1.jpg</div>
+    <div class="buttons">
+        <button id="prev">이전</button>
+        <button id="next">다음</button>
+    </div>
+    <script>
+        // const images = ["images/cat1.jpg", "images/cat2.jpg", "images/cat3.jpg"];
+        // let currentIndex = 0;
+
+        // function nextBtn(){
+        //     const img = document.getElementById("cat1");
+        //     currentIndex = (currentIndex + 1) % images.length;
+        //     img.src = images[currentIndex];
+        // }
+
+        // function previewBtn(){
+        //     const img = document.getElementById("cat1");
+        //     currentIndex = (currentIndex - 1) % images.length;
+        //     img.src= images[currentIndex];
+        // }
+
+        // 미션 1. 클릭 시 classactive 다음거로 이동 ..파일명 등등 갱신
+
+        const images = document.querySelectorAll('.slider img');
+        let currentIndex = 0;
+
+        document.getElementById('prev').addEventListener('click', () => {
+            images[currentIndex].classList.remove('active');
+            currentIndex = currentIndex - 1;
+            if(currentIndex < 0){
+                currentIndex = images.length- 1;
+            }
+            images[currentIndex].classList.add('active');
+            updateFilename();
+        });
+        document.getElementById('next').addEventListener('click', () => {
+            images[currentIndex].classList.remove('active');
+            currentIndex = currentIndex + 1;
+            if(currentIndex > images.length - 1){
+                currentIndex = 0;
+            }
+            images[currentIndex].classList.add('active');
+            updateFilename();
+        });
+
+        function updateFilename(){
+            const filename = document.getElementById('filename');
+            const shortfilename = images[currentIndex].src.split('/').pop();
+            filename.textContent = shortfilename;
+        }
+
+        updateFilename();
+
+    </script>
+</body>
+</html>
