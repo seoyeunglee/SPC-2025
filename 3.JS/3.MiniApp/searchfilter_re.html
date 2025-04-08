@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>searchfilter_re</title>
+</head>
+<body>
+    <h1>searchfilter_re</h1>
+    <input type="text" id="searchInput" placeholder="검색...">
+    <ul id="itemsList">
+        <li>Apple</li>
+        <li>Banana</li>
+        <li>Orange</li>
+        <li>Grape</li>
+        <li>Mango</li>
+        <li>Pineapple</li>
+        <li>Strawberry</li>
+        <li>Blueberry</li>
+        <li>Watermelon</li>
+        <li>Peach</li>
+        <li>Cherry</li>
+        <li>Kiwi</li>
+        <li>Pear</li>
+        <li>Lemon</li>
+        <li>Lime</li>
+        <li>Papaya</li>
+        <li>Plum</li>
+        <li>Raspberry</li>
+        <li>Coconut</li>
+        <li>Pomegranate</li>
+    </ul>
+    <script>
+        // 1. 실시간 검색 기능을 구현한다. 
+        // 1-1. 검색창의 입력 결과를 가져온다.
+        const searchInput = document.getElementById('searchInput');
+        const itemsList = document.getElementById('itemsList');
+        const items = itemsList.getElementsByTagName('li');
+
+        const items2 = itemsList.querySelectorAll('li');
+
+        // // 1-2. 해당 단어가 목록에 포함 되어 있는지 확인한다. (includes라는 내장함수 사용)
+        // searchInput.addEventListener('keyup', () => {
+        //     for (let i = 0; i < items.length; i++){
+        //         const item = items[i]; 
+        //         const text = item.textContent.toLowerCase();
+
+        //         if(text.includes(searchInput.value.toLowerCase())){
+        //             item.style.display = '';
+        //         }else{
+        //             item.style.display = 'none';
+        //         }
+        //     }
+        // });
+
+        // 2. forEach -> Array, List possible
+        searchInput.addEventListener('keyup', () => {
+            // // 2-1 Array 로 캐스팅
+            // Array.from(items).forEach((item) => {
+            //     console.log(item);
+            // })
+
+            // // 2-2. 스프레드 연산자 사용해서 리스트로 풀어주기 
+            // [...items].forEach((item) =>{
+            //     console.log(item);
+            // })
+
+            // 2-3. NodeList라고 불리는 리스트 형태로 만듦.
+            items2.forEach((item) => {
+                const text = item.textContent.toLowerCase();
+                const filter = searchInput.value.toLowerCase();
+
+                if(text.toLowerCase().includes(filter)){
+                    item.style.display = '';
+                }else{
+                    item.style.display = 'none';
+                }
+            })
+
+        });
+    </script>
+</body>
+</html>

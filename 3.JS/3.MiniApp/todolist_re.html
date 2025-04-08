@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todd-list 복습</title>
+    <style>
+        #todo-list li {
+            cursor: pointer;
+        }
+        #todo-list li.done{
+            text-decoration: line-through;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>todo-list</h1>
+    <input id="new-todo" type="text" placeholder="할 일 추가">
+    <button id="add-todo">Add</button>
+    <hr>
+    <ul id="todo-list"></ul>
+    <script>
+        document.getElementById('add-todo').addEventListener('click'), () => {
+            const inputBox = document.getElementById('new-todo');
+            const todoList = document.getElementById('todo-list');
+
+            if (inputBox.value.trim() === '') return;
+
+            const new_li = document.createElement('li');
+            new_li.innerHTML = `${inputBox.value} <button class = "delete">삭제</button>`;
+
+            inputBox.value = "";
+            todoList.appendChild(new_li);
+
+            new_li.addEventListener('click', () => {
+                new_li.classList.toggle('done');
+            });
+
+            const deleteButton = new_li.querySelector('.delete');
+            deleteButton.addEventListener('click', (e) => {
+                console.log(e);
+                new_li.remove();
+            });
+
+            document.getElementById('new-todo').addEventListener('keydown', (e) => {
+                if (event.key === 'Enter') {
+                    document.getElementById('add-todo').click();
+                }
+            });
+        };
+    </script>
+</body>
+
+</html>

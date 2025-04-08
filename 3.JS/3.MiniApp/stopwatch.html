@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>stopwatch.hw</title>
+</head>
+<body>
+    <h1>스톱워치</h1>
+    <div id="time">00:00:00</div>
+    <div id="btnArea">
+        <button id="startBtn">Start</button>
+        <button id="stopBtn">Stop</button>
+        <button id="resetBtn">Reset</button>
+    </div>
+    
+    <script>
+        // (Date()라는 객체를 활용해서 00:00.00 형태의 시간표현)
+        // Start/Stop/Reset 구현하기
+        let time = document.getElementById('time').innerHTML;
+        const start = document.getElementById('startBtn');
+        const stop = document.getElementById('stopBtn');
+        const reset = document.getElementById('resetBtn');
+        
+        start.addEventListener('click', () => {
+            console.log(time);
+            time = Date();
+            console.log(time);
+        });
+
+        stop.addEventListener('click', () => {
+            
+        });
+
+        reset.addEventListener('click', () => {
+
+        });
+
+    </script>
+</body>
+</html>
