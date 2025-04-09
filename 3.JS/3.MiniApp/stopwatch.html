@@ -17,23 +17,45 @@
     <script>
         // (Date()라는 객체를 활용해서 00:00.00 형태의 시간표현)
         // Start/Stop/Reset 구현하기
-        let time = document.getElementById('time').innerHTML;
+        let startTime = 0;
+        let elapsedTime = 0;
+        let timerInterval = null;
+        let isRunning = false;
+
+        const timeDisplay = document.getElementById('time');
         const start = document.getElementById('startBtn');
         const stop = document.getElementById('stopBtn');
         const reset = document.getElementById('resetBtn');
+
+        function formatTime(ms){
+            const minuates = String(Math.floor(ms/60000)).padStart(2, '0');
+            const seconds = String(Math.floor((ms%60000) / 1000)).padStart(2, '0');
+            const centiseconds = String(Math.floor((ms%1000) / 10)).padStart(2, '0');
+            return `${minuates}:${seconds}.${centiseconds}`;
+        }
         
         start.addEventListener('click', () => {
-            console.log(time);
-            time = Date();
-            console.log(time);
+            if(isRunning) return;
+            isRunning = true;
+            startTime = Date.now() - elapsedTime;
+
+            timerInterval = setInterval(() => {
+                elapsedTime = Date.now() - startTime;
+                timeDisplay.textContent = formatTime(elapsedTime);
+            }, 10);
         });
 
         stop.addEventListener('click', () => {
-            
+            if(!isRunning) return;
+            clearInterval(timerInterval);
+            isRunning = false;
         });
 
         reset.addEventListener('click', () => {
-
+            clearInterval(timerInterval);
+            elapsedTime = 0;
+            isRunning = false;
+            timeDisplay.textContent = "00:00.0";
         });
 
     </script>
