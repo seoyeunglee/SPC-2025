@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas {
+            border: 1px solid white;
+        }
+
+        body {
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="400" height="300"></canvas>
+
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let pacmac = {
+            x: 350,
+            y: 200,
+            size: 30,
+            startAngle: 0.2 * Math.PI,
+            endAngle: 1.8 * Math.PI,
+            directionX: 1,
+            directionY: 0,
+            speed: 1,
+            mouthOpen: 1,
+            angleIncrement: 0.02 * Math.PI,
+        }
+
+        // let startAngle = 0.2 * Math.PI;
+        // let endAngle = 1.8 * Math.PI;
+        // let direction = 1; // 입이 이동하는 방향
+        // let angleIncrement = 0.02 * Math.PI; // 입이 이동하는 속도
+
+
+        function drawPacman() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.beginPath();
+            ctx.moveTo(pacmac.x, pacmac.y);
+            ctx.arc(pacmac.x, pacmac.y, pacmac.size, pacmac.startAngle, pacmac.endAngle);
+            ctx.fillStyle = 'yellow';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function updateAngles() {
+            if (pacmac.startAngle <= 0 || pacmac.startAngle >= 0.25 * Math.PI) {
+                pacmac.direction *= -1;
+            }
+            pacmac.startAngle += pacmac.angleIncrement * pacmac.mouthOpen;
+            pacmac.endAngle -= pacmac.angleIncrement * pacmac.mouthOpen;
+        }
+
+        function updatePacmanPosition() {
+            pacmac.x += pacmac.directionX;
+            if(pacmac.x > canvas.width - pacmac.size){
+                pacmac.x = canvas.width - pacmac.size;
+            }
+            if(pacmac.x < pacmac.size){
+                pacmac.x = pacmac.size;
+            }
+        }
+
+        function animate() {
+            updatePacmanPosition();
+            drawPacman();
+            updateAngles();
+            requestAnimationFrame(animate);
+        }
+
+        function handleKeyDown(e) {
+            switch (e.key) {
+                case 'ArrowLeft':
+                    pacmac.directionX += -1;
+                    pacmac.directionY = 0;
+                    break;
+                case 'ArrowRight':
+                    pacmac.directionX += 1;
+                    pacmac.directionY = 0;
+                    break;
+                case 'ArrowUp':
+                    pacmac.directionY += -1;
+                    pacmac.directionX = 0;
+                    break;
+                case 'ArrowDown':
+                    pacmac.directionY += 1;
+                    pacmac.directionX = 0;
+                    break;
+            }
+        }
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        animate();
+    </script>
+
+</body>
+
+</html>
