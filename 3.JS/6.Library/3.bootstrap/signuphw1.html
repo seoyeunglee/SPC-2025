@@ -17,30 +17,58 @@
     <div class="container my-4">
         <h2>회원가입 폼</h2>
         <form id="signupForm">
-            <div class="mb-3">
-                <lavel for="userId" class="form-label">사용자명</lavel>
-                <input type="text" name="userId" id="userId" class="form-control" placeholder="3~10 글자로 입력하세요" required>
-            </div>
-            <div class="mb-3">
-                <lavel for="name" class="form-label">비밀번호</lavel>
-                <input type="password" name="password" id="password" class="form-control"
-                    placeholder="대소문자, 숫자/특수문자 포함 8자 이상" required>
-            </div>
-            <div class="mb-3">
-                <lavel for="name" class="form-label">이름</lavel>
-                <input type="text" name="name" id="name" class="form-control" placeholder="1~10 글자로 입력하세요" required>
-            </div>
-            <div class="mb-3">
-                <lavel for="birth" class="form-label">생년월일</lavel>
-                <input type="date" name="birth" id="birth" class="form-control" required>
-            </div>
+            <lavel for="userId" class="form-label">아이디</lavel>
+            <div class="input-group flex-nowrap mb-3">
+                <span class="input-group-text" id="addon-wrapping"> <i class="bi bi-person"></i></span>
+                <input type="text" name="userId" id="userId" class="form-control" placeholder="3~10 글자로 입력하세요" aria-label="Username" aria-describedby="addon-wrapping" required>
+              </div>
+              <lavel for="password" class="form-label">비밀번호</lavel>
+            <div class="input-group flex-nowrap mb-3">
+                <span class="input-group-text" id="addon-wrapping"> <i class="bi bi-lock-fill"></i></span>
+                <input type="password" name="password" id="password" class="form-control" placeholder="3~10 글자로 입력하세요" aria-label="password" aria-describedby="addon-wrapping" required>
+              </div>
+              <lavel for="name" class="form-label">이름</lavel>
+            <div class="input-group flex-nowrap mb-3">
+                <span class="input-group-text" id="addon-wrapping"> <i class="bi bi-person-vcard-fill"></i></span>
+                <input type="text" name="name" id="name" class="form-control" placeholder="3~10 글자로 입력하세요" aria-label="Username" aria-describedby="addon-wrapping" required>
+              </div>
+              <lavel for="birth" class="form-label">생년월일</lavel>
+            <div class="input-group flex-nowrap mb-3">
+                <span class="input-group-text" id="addon-wrapping"> <i class="bi bi-table"></i></span>
+                <input type="date" name="birth" id="birth" class="form-control" aria-label="Username" aria-describedby="addon-wrapping" required>
+              </div>
 
             <button type="submit" class="btn btn-primary">제출하기</button>
-
         </form>
 
-
+        <div id="result" class="mt-4"></div>
     </div>
+    
+    <script>
+        const form = document.getElementById('signupForm');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            // 폼데이터 가져오기 - 위의 폼을 객체에 넣고, get 함수를 통해서 필드 내용을 가져오도록 설정
+            const formData = new FormData(form);
+            const userId = formData.get('userId');
+            const password = formData.get('password');
+            const name = formData.get('name');
+            const birth = formData.get('birth');
+
+            resultDiv.innerHTML = `
+            <div class = "alert alert-success">
+                <h5>폼 데이터 제출 완료!</h5>
+                <p><strong>아이디: </strong> ${userId} </p>
+                <p><strong>비밀번호: </strong> ${password} </p>
+                <p><strong>이름: </strong> ${name} </p>
+                <p><strong>생년월일: </strong> ${birth} </p>
+                </div>
+                `;
+        })
+    </script>
 
 </body>
 

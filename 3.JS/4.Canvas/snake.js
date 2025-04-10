@@ -8,10 +8,12 @@ const BLOCK_SIZE = 20;
 let snake = {x:0, y:0}
 let food = {x:100, y:100}
 let direction = 'right';
-let canvas = 0;
+let canvas;
+
+window.onload = initialize;
 
 function initialize() {
-    canvas = document.getElementById("snackCanvas");
+    canvas = document.getElementById("snakeCanvas");
     context = canvas.getContext('2d');
 
     // 키 이벤트 리스너 추가
@@ -27,7 +29,22 @@ function setupEventListeners(){
     // function keyHandler(ev){
     //     console.log("키보드 눌림", ev);
     // }
-    document.addEventListener('keydown', (ev));
+    document.addEventListener('keydown', (ev) => {
+        switch(ev.key){
+            case 'ArrowUp':
+                direction = 'up'
+                break;
+            case 'ArrowDown':
+                direction = 'down'
+                break;
+            case 'ArrowLeft':
+                direction = 'left'
+                break;
+            case 'ArrowRight':
+                direction = 'right'
+                break;
+        }
+    });
 }
 
 function gameLoop(){
@@ -42,10 +59,35 @@ function gameLoop(){
 function moveSnake(){
     // snake.x += BLOCK_SIZE;
     switch(direction){
+        case 'up':
+            snake.y -= BLOCK_SIZE;
+            break;
+        case 'down':
+            snake.y += BLOCK_SIZE;
+            break;
+        case 'left':
+            snake.x -= BLOCK_SIZE;
+            break;
+        case 'right':
+            snake.x += BLOCK_SIZE;
+            break;
         
     }
 
     // 화면을 벗어나지 않게.. 오른쪽 끝 -> 왼쪽 끝에서 나오기 (vise versa)
+    //                       위로 -> 아래로 나오기 (vice versa)
+    if(snake.x > canvas.width){
+        snake.x = 0;
+    }
+    if(snake.x < 0){
+        snake.x = canvas.width;
+    }
+    if(snake.y > canvas.height){
+        snake.y = 0;
+    }
+    if(snake.y < 0){
+        snake.y = canvas.height;
+    }
 
 }
 
@@ -55,9 +97,12 @@ function draw(){
     context.clearRect(0, 0, canvas.width, canvas.height);
     // 뱀 그리기
     context.fillStyle = 'blue';
-    context.fillRect(snack.x, snake.y, BLOCK_SIZE, BLOCK_SIZE);
+    context.fillRect(snake.x, snake.y, BLOCK_SIZE, BLOCK_SIZE);
     // 사과 그리기
+    if(snake.x === food.x && snake.y === food.y){
+        food.x = Math.floor(Math.random()*canvas.width/BLOCK_SIZE)*BLOCK_SIZE;
+    }
+
     context.fillStyle = 'red';
-    food.x = Math.floor(Math.random()*canvas.width/BLOCK_SIZE);
     context.fillRect(food.x, food.y, BLOCK_SIZE, BLOCK_SIZE);
 }
