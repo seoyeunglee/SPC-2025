@@ -5,7 +5,10 @@ window.onload = initialize;
 const GAME_SPEED = 200; // ms 화면 갱신 주기
 const BLOCK_SIZE = 20;
 
-let snake = {x:0, y:0};
+let snake = {x:0, y:0}
+let food = {x:100, y:100}
+let direction = 'right';
+let canvas = 0;
 
 function initialize() {
     canvas = document.getElementById("snackCanvas");
@@ -20,7 +23,11 @@ function initialize() {
 }
 // 여기는 키보드 인터럽트(이벤트) 핸들러
 function setupEventListeners(){
-    
+
+    // function keyHandler(ev){
+    //     console.log("키보드 눌림", ev);
+    // }
+    document.addEventListener('keydown', (ev));
 }
 
 function gameLoop(){
@@ -33,7 +40,10 @@ function gameLoop(){
 }
 // 뱀의 위치를 이동한다
 function moveSnake(){
-    snake.x += BLOCK_SIZE;
+    // snake.x += BLOCK_SIZE;
+    switch(direction){
+        
+    }
 
     // 화면을 벗어나지 않게.. 오른쪽 끝 -> 왼쪽 끝에서 나오기 (vise versa)
 
@@ -41,8 +51,13 @@ function moveSnake(){
 
 // 화면에 뱀을 그린다
 function draw(){
+    // 화면 클리어 
     context.clearRect(0, 0, canvas.width, canvas.height);
-
+    // 뱀 그리기
     context.fillStyle = 'blue';
     context.fillRect(snack.x, snake.y, BLOCK_SIZE, BLOCK_SIZE);
+    // 사과 그리기
+    context.fillStyle = 'red';
+    food.x = Math.floor(Math.random()*canvas.width/BLOCK_SIZE);
+    context.fillRect(food.x, food.y, BLOCK_SIZE, BLOCK_SIZE);
 }
