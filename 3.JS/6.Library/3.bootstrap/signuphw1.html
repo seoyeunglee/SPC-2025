@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 1</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <div class="container my-4">
+        <h2>회원가입 폼</h2>
+        <form id="signupForm">
+            <div class="mb-3">
+                <lavel for="userId" class="form-label">사용자명</lavel>
+                <input type="text" name="userId" id="userId" class="form-control" placeholder="3~10 글자로 입력하세요" required>
+            </div>
+            <div class="mb-3">
+                <lavel for="name" class="form-label">비밀번호</lavel>
+                <input type="password" name="password" id="password" class="form-control"
+                    placeholder="대소문자, 숫자/특수문자 포함 8자 이상" required>
+            </div>
+            <div class="mb-3">
+                <lavel for="name" class="form-label">이름</lavel>
+                <input type="text" name="name" id="name" class="form-control" placeholder="1~10 글자로 입력하세요" required>
+            </div>
+            <div class="mb-3">
+                <lavel for="birth" class="form-label">생년월일</lavel>
+                <input type="date" name="birth" id="birth" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">제출하기</button>
+
+        </form>
+
+
+    </div>
+
+</body>
+
+</html>

@@ -10,15 +10,16 @@
 </head>
 
 <body>
-    <button class="btn btn-primary" type="button" id="loadBtn">Load Data</button>
-
+    <div class="container m-4">
+        <button class="btn btn-primary" type="button" id="loadBtn">Load Data</button>
+    </div>
     <script>
         const btn = document.getElementById('loadBtn');
         btn.addEventListener('click', function () {
             btn.innerHTML = '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading... '
         })
     </script>
-    
+
 
 </body>
 
