@@ -102,7 +102,6 @@ function draw(){
     if(snake.x === food.x && snake.y === food.y){
         food.x = Math.floor(Math.random()*canvas.width/BLOCK_SIZE)*BLOCK_SIZE;
     }
-
     context.fillStyle = 'red';
     context.fillRect(food.x, food.y, BLOCK_SIZE, BLOCK_SIZE);
 }

@@ -16,6 +16,7 @@ class Circle{
 
 const myCircle = new Circle(5);
 console.log(myCircle.diameter);
+console.log(myCircle._radius);
 
 myCircle.diameter = 14;
 console.log(myCircle. _radius); // 내부 변수에 직접 접근해서 radius가 diameter로부터 잘 저장되엇는지 확인.
