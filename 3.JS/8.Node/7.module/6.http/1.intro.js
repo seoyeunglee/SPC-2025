@@ -1,6 +1,6 @@
 const http = require('http');
 
-const server = http.createServer();
+const server = http.createServer(); // 서버생성
 
 server.on('request', (req, resp) =>{
     console.log('요청이 왔음');

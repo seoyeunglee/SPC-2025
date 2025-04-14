@@ -2,7 +2,7 @@ const express = require('express');
 
 const app = express();
 const port = 3000;
-/*
+
 app.get('/', (req, res) => {
     res.send('헬로우');
 });
@@ -15,18 +15,18 @@ app.put('/', (req,res) => {
 app.delete('/', (req,res) => {
     res.send('Delete message');
 });
-*/
 
-app.get('/', (req, res) => {
+
+app.get('/user', (req, res) => {
     res.send('사용자 정보조회');
 });
-app.post('/', (req,res) => {
+app.post('/user', (req,res) => {
     res.send('사용자 생성');
 });
-app.put('/', (req,res) => {
+app.put('/user', (req,res) => {
     res.send('사용자 정보 수정');
 });
-app.delete('/', (req,res) => {
+app.delete('/user', (req,res) => {
     res.send('사용자 삭제');
 });
 

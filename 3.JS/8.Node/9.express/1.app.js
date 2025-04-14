@@ -10,6 +10,11 @@ app.get('/', (req,res) => {
     res.send('Hello, Express!');
 });
 
+app.get('/user', (req, res) => {
+    // 이걸 통해서 기본 header와 body가 잘 만들어짐... 
+})
+
+// 서버 시작 
 app.listen(port, () => {
     console.log(`서버가 준비됨.. ${port} 에서...`);
 });

@@ -6,7 +6,7 @@ const fs = require('fs');
 const data = fs.readFileSync('index.html', 'utf-8');
 
 app.get('/', (req, res) => {
-    console.log(`파일읽기 : ${res}`);
+    console.log(`파일읽기 : `,data);
     res.send(data);
 });
 

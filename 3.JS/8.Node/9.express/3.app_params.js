@@ -22,12 +22,15 @@ app.get('/users/:id/profile', (req, res) => {
 
 app.get('/search', (req, res) => {
     const keyword = req.query.keyword; // 쿼리 파라미터는 req.query 안에 담겨서 옴 
-    const category = req.query.category;
+    const category = req.query.category; // 쿼리 파라미터의 category라는 key의 값을 가져옴 
 
     res.send(`키워드 : ${keyword}, 카테고리 : ${category}`);
 });
 
 // http://localhost:3000/search?keyword=python&category=food
+// search?keyword=programming&category=javascript
+// 테스트시: curl "localhost:3000/search?keyword=programming&category=javascript"
+// 브라우저에서: http://localhost:3000/search?keyword=python&category=food
 
 app.listen(port, () => {
     console.log(`서버 레디 on ${port}`);
