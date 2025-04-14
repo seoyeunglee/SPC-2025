@@ -11,10 +11,10 @@ const data = fs.readFileSync('index.html', {encoding:'utf-8', flag:'r'});
 
 // 웹 서버 만들기 
 const server = http.createServer((req, res) => {
-    res.writeHead(200);
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end(data);
 });
 
 server.listen(3000, () => {
-    console.log("서버기 3000번 포트를 잘 리슨하고 있습니다. 지금부터 사용자의 요청을 기다리겠습니다.");
+    console.log("서버가 3000번 포트를 잘 리슨하고 있습니다. 지금부터 사용자의 요청을 기다리겠습니다.");
 });
