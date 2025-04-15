@@ -10,6 +10,7 @@ const port = 3000;
 
 app.use(morgan('dev'));
 
+app.use('/', mainRouter);
 app.use('/user', userRouter);
 app.use('/product', productRouter);
 
