@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <h1>Fetch를 사용한 외부요청</h1>
+    <button id="loadDataBtn">데이터 로드</button>
+    <button id="postDataBtn">데이터 로드</button>
+    <div id="result"></div>
+    <script>
+        document.getElementById('loadDataBtn').addEventListener('click', async () => {
+            try {
+                const response = await axios.get('https://jsonplaceholder.typicode.com/posts/1');
+                // .then
+                const data = response.data;
+                document.getElementById('result').innerHTML = `
+                <p><strong>타이틀</strong>${data.title}</p>
+                <p><stong>본문</strong>${data.body}</p>
+                `;
+            } catch (err) {
+                document.getElementById('result').innerHTML = `
+                <p>오류가 발생했습니다</p>
+                `;
+            }
+        });
+
+        document.getElementById('postDataBtn').addEventListener('click', async () => {
+                const postData = {
+                title : 'foo',
+                body : 'bar',
+                userId : 1
+            };
+                const response = await axios.get('https://jsonplaceholder.typicode.com/posts', postData);
+                document.getElementById('result').innerText = JSON.stringify(json, null, 2);
+        });
+
+        document.getElementById('loadImageBtn').addEventListener('click', async() => {
+            const response = await axios.get('https://dog.ceo/api/breeds/image/random');
+
+            const imageUrl = response.data.message;
+        })
+    </script>
+</body>
+
+</html>
