@@ -6,3 +6,9 @@ node_modules/
 # 맥북의 인덱스 파일
 .DS_Store
 
+# 윈도우 실행 파일
+*.exe
+
+# 크리덴셜 파일(Credential)은 커밋 제외 
+secret.txt
+.env
