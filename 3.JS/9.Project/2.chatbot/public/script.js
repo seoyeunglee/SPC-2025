@@ -22,41 +22,44 @@ closeChatbot.addEventListener('click', () => {
     chatbotWindow.style.display = 'none';
 })
 
-async function getInputFromYourAndClearInputScreenAndSendMessageToServerAndWriteAnswer(){
+function addMessage(message, sender = 'user') {
+    const myMessage = document.createElement('div');
+    myMessage.innerHTML = sender === 'user'
+        ? `<i class="bi bi-person"></i> ${message}`
+        : `<i class="bi bi-robot"></i> ${message}`;
+        myMessage.classList.add(sender);
+    chatbotMessages.appendChild(myMessage);
+
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+async function getInputFromYourSendMessage() {
     const question = chatbotInput.value;
 
+    // 메세지 지우기 
     chatbotInput.value = '';
+    addMessage(question, 'user');
 
-    // 내 메세지 추가
-    const myMessage = document.createElement('div');
-    myMessage.innerHTML = '나: '+ question;
-    chatbotMessages.appendChild(myMessage);
-    // 스크롤
-    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
- 
     // 서버로 보낸다..
-    const resp = await fetch('/api/chat', {
-     method: 'POST',
-     headers: { "Content-Type" : "application/json" },
-     body: JSON.stringify({ question }), //"question": message
+    const resp = await fetch(`${API_SERVER}/api/chat`, {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question }), //"question": message
     });
     const result = await resp.json();
     console.log(result);
- 
-    const answer = document.createElement('div');
-    answer.innerHTML = result.question;
- 
-    chatbotMessages.appendChild(answer);
+
+    addMessage(result.question, 'chatbot');
 }
 
-sendMessage.addEventListener('click', async() => {
-    getInputFromYourAndClearInputScreenAndSendMessageToServerAndWriteAnswer();
+sendMessage.addEventListener('click', async () => {
+    getInputFromYourSendMessage();
 });
 
 chatbotInput.addEventListener('keypress', (e) => {
-    if(e.key === 'Enter'){
+    if (e.key === 'Enter') {
         console.log('엔터 키 눌렸으니, 서버로 보내는 코드 짜기');
-        getInputFromYourAndClearInputScreenAndSendMessageToServerAndWriteAnswer();
+        getInputFromYourSendMessage();
     }
     // console.log('키보드');
 });
