@@ -1,10 +1,7 @@
-import sqlite3
 from flask import Flask, send_from_directory, request
+import sqlite3
 
 app = Flask(__name__)
-
-conn = sqlite3.connect('users.db', check_same_thread=False)
-cur = conn.cursor()
 
 @app.route('/')
 def index():
@@ -14,16 +11,20 @@ def index():
 def login():
     username = request.form.get('username')
     password = request.form.get('password')
+    
+    
+    conn = sqlite3.connect('users.db')
+    cur = conn.cursor()
 
-    cur.execute('SELECT * FROM users WHERE username=? AND password=?', (username, password))
+    cur.execute('SELECT * FROM users WHERE username=? AND PASSWORD=?', (username, password))
     user = cur.fetchone()
-    return 'OK'
+    
     conn.close()
-
+    
     if user:
-        return '성공'
+        return "로그인 성공"
     else:
-        return '실패'
-
-if __name__ == "__main__":
+        return "로그인 실패"
+    
+if __name__ == '__main__':
     app.run(debug=True)
