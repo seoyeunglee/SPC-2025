@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>로그인 페이지</h1>
+    <button onclick="location.href='/login'">로그인</button>
+    <button onclick="location.href='/cart'">카트</button>
+    <button onclick="location.href='/logout'">로그아웃</button>
+    <hr>
+    <form action="/login" method="post">
+        <label for="username">Username: </label>
+        <input type="text" name="username" placeholder="username"><br>
+        <label for="password">Password: </label>
+        <input type="password" name="password" placeholder="password"><br>
+        <button type="submit" id="loginBtn">login</button>
+    </form>
+</body>
+
+</html>
