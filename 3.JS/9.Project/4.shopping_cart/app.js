@@ -86,11 +86,23 @@ app.post('/api/cart/:productId', (req, res) => {
     });
 });
 
+app.post('/api/delCP/:CPid', (req, res) => {
+    const {CPid} = req.params;
+    
+    
+})
+
 app.get('/api/cart', (req, res) => {
     const cart = req.session.cart || []; // 장바구니에 물건 담은적이 없이 카트를 올수도 있음.
     console.log('내카트: ', cart);
     res.json({ cart });
 });
+
+app.get('/logout', (req, res) => {
+    req.session.destroy();
+    // res.send(`안녕히가세요...`);
+    res.sendFile(path.join(__dirname, 'public', 'home.html'));
+})
 
 // 메인 서버 시작
 app.listen(port, () => {
