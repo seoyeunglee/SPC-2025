@@ -1,2 +1,1 @@
 CREATE TABLE memo1 (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, message TEXT, image TEXT);
-

@@ -6,11 +6,13 @@ const path = require('path');
 const morgan = require('morgan');
 const fs = require('fs');
 
+const uploadsDir = path.join(__dirname, 'public', 'uploads');
+
 try {
-	fs.readdirSync('uploads'); // 폴더 확인
-} catch(err) {
-	console.error('uploads 폴더가 없습니다. 폴더를 생성합니다.');
-    fs.mkdirSync('uploads'); // 폴더 생성
+    fs.readdirSync(uploadsDir); // 폴더 존재 여부 확인
+} catch (err) {
+    console.error('public/uploads 폴더가 없습니다. 폴더를 생성합니다.');
+    fs.mkdirSync(uploadsDir, { recursive: true }); // 하위 폴더까지 생성
 }
 
 const app = express();
@@ -67,38 +69,83 @@ app.get('/api/memos', (req, res) => {
 
 app.post('/api/delmemo/:id', (req, res) => {
     const { id } = req.params;
-    const query= 'DELETE FROM memo1 WHERE id=?';
 
-    db.run(query, [id], function(err) { 
-        if(err){
-            console.log(err);
-            return res.status(500).json({message: '삭제실패'});
+    // 먼저 이미지 경로 조회
+    const selectQuery = 'SELECT image FROM memo1 WHERE id = ?';
+    db.get(selectQuery, [id], (err, row) => {
+        if (err) {
+            console.error('이미지 경로 조회 실패:', err);
+            return res.status(500).json({ message: '조회 실패' });
         }
-        if(this.changes === 0){
-            return res.status(404).json({message: '메모없음'});
-        }
-        res.json({message:'삭제완료'});
+
+        const imagePath = row?.image ? path.join(__dirname, 'public', row.image) : null;
+
+        // DB에서 메모 삭제
+        const deleteQuery = 'DELETE FROM memo1 WHERE id = ?';
+        db.run(deleteQuery, [id], function (err) {
+            if (err) {
+                console.log(err);
+                return res.status(500).json({ message: '삭제 실패' });
+            }
+
+            if (this.changes === 0) {
+                return res.status(404).json({ message: '메모 없음' });
+            }
+
+            // 이미지가 있을 경우 로컬 파일 삭제
+            if (imagePath) {
+                fs.unlink(imagePath, (err) => {
+                    if (err) {
+                        console.warn('이미지 파일 삭제 실패:', err.message);
+                    } else {
+                        console.log('이미지 파일 삭제 완료:', imagePath);
+                    }
+                });
+            }
+
+            res.json({ message: '삭제 완료' });
+        });
     });
 });
 
 app.put('/api/editmemo/:id', upload.single('image'), (req, res) => {
     const { id } = req.params;
-    const{ title, message } = req.body;
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
-    console.log(title, message, image);
+    const { title, message } = req.body;
+    const newImage = req.file ? `/uploads/${req.file.filename}` : null;
 
-    const query = 'UPDATE memo1 SET title=?, message=?, image=? WHERE id=?';
-
-    db.run(query, [title, message, image, id], function(err){
-        if(err){
-            console.log(err);
-            return res.status(500).json({message: '수정실패'});
+    const selectQuery = 'SELECT image FROM memo1 WHERE id = ?';
+    db.get(selectQuery, [id], (err, row) => {
+        if (err) {
+            console.log('이미지 조회 실패:', err);
+            return res.status(500).json({ message: '조회 실패' });
         }
-        res.json({message:'수정완료'});
+
+        const oldImage = row?.image;
+        const finalImage = newImage || oldImage;
+
+        const updateQuery = 'UPDATE memo1 SET title=?, message=?, image=? WHERE id=?';
+        db.run(updateQuery, [title, message, finalImage, id], function (err) {
+            if (err) {
+                console.log(err);
+                return res.status(500).json({ message: '수정 실패' });
+            }
+
+            // 새 이미지가 올라오고, 기존 이미지가 존재할 때 삭제
+            if (newImage && oldImage) {
+                const imagePath = path.join(__dirname, 'public', oldImage);
+                fs.unlink(imagePath, (err) => {
+                    if (err) {
+                        console.warn('기존 이미지 삭제 실패:', err.message);
+                    } else {
+                        console.log('기존 이미지 삭제 완료:', imagePath);
+                    }
+                });
+            }
+
+            res.json({ message: '수정 완료' });
+        });
     });
 });
-
-
 
 
 app.listen(port, () => {
