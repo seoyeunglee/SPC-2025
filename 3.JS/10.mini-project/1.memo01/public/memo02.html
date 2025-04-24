@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>memo2.0</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" rel="stylesheet" type="test/css">
+    <link rel="stylesheet" href="css/style2.css">
+</head>
+<body>
+    <div class="wrap">
+        <form id="uploadForm" action="/api/input" method="POST" enctype="multipart/form-data">
+        <div class="input-container">
+            <div class="form-group">
+                <h1>메모장</h1>
+            </div>
+            <div class="form-group">
+                <input class="form-control" id="input-title" name="title" placeholder="제목을 입력하세요">
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" id="input-text" name="message" rows="2" placeholder="내용을 입력하세요"></textarea>
+            </div>
+            <div class="form-group">
+                <input class="form-control" id="input-image" name="image" accept="image/*" type="file">
+            </div>
+            <div class="form-group">
+                <button type="submit" onclick="uploadPost()" class="btn btn-primary">저장하기</button>
+            </div>
+        </div>
+    </form>
+        
+        <div id="card-list" class="row">
+
+        </div>
+    </div>
+    
+    <script src="js/memo2.js"></script>
+</body>
+</html>
