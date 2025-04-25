@@ -3,29 +3,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     const data = await response.json();
 
     displayMemos(data);
-})
+});
 
-function uploadPost() {
-    console.log('click');
-    inputmemo();
-    location.reload(); //
-}
+// document.getElementById('uploadPost').addEventListener('click', () =>{
+//     console.log('click');
+//     location.reload();
+// });
+
+// function uploadPost() {
+//     console.log('click');console.log('click');
+//     inputmemo();
+// }
 
 async function inputmemo() {
     const title = document.getElementById('input-title').value;
     const message = document.getElementById('input-text').value;
-    const image = document.getElementById('input-image').file[0];
+    const image = document.getElementById('input-image').files[0];
+
     const formData = new FormData();
     formData.append('title', title);
     formData.append('message', message);
     formData.append('image', image);
 
-    const response = await fetch('/api/input', {
-        method: 'POST',
-        body: formData
-    });
-    const result = await response.json();
-    console.log(result);
+    try {
+        const res = await fetch('/api/input', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (res.ok) location.reload();
+    } catch (err) {
+        console.log(err.message);
+    }
+
+
 }
 
 function displayMemos(memos) {
@@ -70,7 +81,7 @@ function modifyPost(id) {
     const image = card.querySelector('.card-image');
 
     console.log(image);
-    
+
     card.innerHTML = `
         <div class="card mb-4" id="card_${id}">
         <div class="card-body">
@@ -82,7 +93,7 @@ function modifyPost(id) {
         `
 }
 
-async function updatePost(event, id){
+async function updatePost(event, id) {
     event.preventDefault();
 
     const title = document.getElementById(`mod-title-${id}`).value;
@@ -95,14 +106,14 @@ async function updatePost(event, id){
     formData.append('message', message);
     formData.append('image', image);
 
-    try{
+    try {
         const res = await fetch(`/api/editmemo/${id}`, {
             method: 'PUT',
             body: formData
         });
 
-        if(res.ok) location.reload();
-    }catch(err){
+        if (res.ok) location.reload();
+    } catch (err) {
         console.log(err.message);
     }
 

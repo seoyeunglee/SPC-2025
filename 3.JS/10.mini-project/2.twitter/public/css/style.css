@@ -1,0 +1,17 @@
+nav{
+    background-color: black;
+}
+nav #logoutnav{
+    display: block;
+}
+
+nav #loginnav{
+    display: none;
+}
+
+li{
+    color:aliceblue;
+}
+li a{
+    color:white;
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login.html</title>
+    <link rel ="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+        </ul>
+    </nav>
+    <h1>로그인</h1>
+
+    <form method="post">
+        <!-- <input type="hidden" id="csrf_token" name="csrf_token" value="{{csrfToken}}"> -->
+        <p>
+            <label for="email">이메일</label>
+            <input id="email" name="email" required type="text">
+        </p>
+        <p>
+            <label for="password">비밀번호</label>
+            <input id="password" name="password" required type="password">
+        </p>
+        <p>
+            <input id="login" name="submit" type="submit" value="로그인">
+        </p>
+    </form>
+
+    <script src="/js/login.js"></script>
+</body>
+</html>
