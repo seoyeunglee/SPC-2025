@@ -16,7 +16,13 @@ function displayTweets(tweets){
         </div>
         <p class="tweet-author">- ${tweet.user_id} -</p>
         <div class="tweet-actions">
-        <p><a href="/login">Log in to like</a></p>
+        <p id="beforelogin"><a href="/login">Log in to like</a></p>
+        <form id="like" action="/tweet/like/" method="POST">
+        <button type="submit">Like</button>
+        </form>
+        <form id="unlike" action="/tweet/unlike/" method="POST">
+        <button type="submit">Unlike</button>
+        </form>
         <span class="likes-count">Likes: ${tweet.likes_count}</span>
         </div></div>
         `

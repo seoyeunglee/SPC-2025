@@ -47,6 +47,8 @@ function showProfile(){
     // document.getElementById('useremailSpan').textContent = email;
     document.getElementById('logoutnav').style.display= 'none';
     document.getElementById('loginnav').style.display= 'block';
+    document.getElementById('like').style.display='block';
+    document.getElementById('beforelogin').style.display='none';
 }
 
 function blindProfile(){

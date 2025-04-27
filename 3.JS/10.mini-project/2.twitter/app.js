@@ -38,8 +38,8 @@ app.post('/api/login', (req, res) => {
     db.get(query, [email, password], (err, row) => {
         if(err) console.log('error');
         if(row){
-            req.session.user = {id:row.id, email:row.email};
-            res.json({message: 'success', email:row.email});
+            req.session.user = {email:row.email, password:row.password};
+            res.json({message: 'success'});
         }else{
             res.status(401).json({message:'로그인실패'});
         }
