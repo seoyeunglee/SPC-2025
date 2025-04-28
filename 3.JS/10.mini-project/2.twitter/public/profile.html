@@ -17,19 +17,19 @@
         </ul>
     </nav>
 
-    <h1>트윗 글작성</h1>
+    <h1>프로필</h1>
     <div id="flash-message" class="flash-messages"></div>
-    <div class="tweet-form-box">
+    <div id="profile-box">
         <form>
-            <textarea id="content" rows="2" placeholder="내용을 입력하세요"></textarea>
-            <br>
-            <button type="submit" id="tweetBtn">트윗하기</button>
+            <label>사용자명</label>
+            <input type="text" id="profile-username"><br>
+            <label>이메일</label>
+            <input type="email" id="profile-email"><br>
+            <button type="submit">프로필 수정</button>
         </form>
     </div>
 
-    <div id="tweets"><!-- 동적으로 불러와서 채울 예정 --></div>
-
     <script src="js/common.js"></script>
-    <script src="js/tweet.js"></script>
+
 </body>
 </html>

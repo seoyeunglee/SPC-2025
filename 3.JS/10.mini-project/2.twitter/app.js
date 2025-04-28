@@ -9,9 +9,9 @@ const port = 3000;
 const db = new sqlite.Database('tweet.db', (err) => {
     if (!err) {
         console.log('DB 연결 성공');
-        db.run('PRAGMA foreign_keys = ON')
+        db.run('PRAGMA foreign_keys = ON');
     }else{
-        console.log()
+        console.log('DB연결 실패');
     }
 });
 
@@ -28,7 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(session({
-    secret: 'password1234',
+    secret: 'this-is-my-password',
     resave: false,
     saveUninitialized: false
 }));
@@ -40,39 +40,53 @@ app.get('/register', (req, res) => res.sendFile(path.join(__dirname, 'public', '
 app.get('/tweet', (req, res) => res.sendFile(path.join(__dirname, 'public', 'tweet.html')));
 
 app.get('/api/tweets', (req, res) => {
-    const query = 'SELECT content, u.username, likes_count from tweet t join user u on t.user_id = u.id ORDER BY t.id DESC';
-    db.all(query, [], (err, rows) => {
-        if(req.session.user){
+    const query = `
+        SELECT tweet.*, user.username 
+        FROM tweet 
+        JOIN user ON tweet.user_id = user.id
+        ORDER BY tweet.id DESC
+    `;
+
+    db.all(query, [], (err, tweets) => {
+        if (req.session.user) {
             const userId = req.session.user.id;
+
             const queryLike = 'SELECT tweet_id FROM like WHERE user_id=?';
             db.all(queryLike, [userId], (err, likes) => {
                 const likedTweetIds = likes.map(like => like.tweet_id);
+
+                const result = tweets.map(tweet => ({
+                    ...tweet,
+                    liked_by_current_user: likedTweetIds.includes(tweet.id)
+                }));
+                res.json(result);
             })
+        } else {
+            res.json(tweets.map(tweet => ({...tweet, liked_by_current_user: false})));
         }
-        res.json(rows);
-    });
+    })
 });
 
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
-    const query = 'SELECT * FROM user WHERE email=? AND password=?';
 
-    db.get(query, [email, password], (err, row) => {
-        if (err) console.log('error');
-        if (row) {
-            res.session.user = {
-                id: user.id,
-                email: user.email,
-                password: user.password
-            };
-            res.json({ message: '로그인성공' });
-        } else {
-            res.status(401).json({ message: '로그인실패' });
+    const query = 'SELECT * FROM user WHERE email=?';
+    db.get(query, [email], (err, user) => {
+        if (err || !user || user.password !== password) { 
+            return res.status(401).json({'error': '로그인에 실패하였습니다.'});
         }
-    });
+        req.session.user = {
+            id: user.id,
+            username: user.username,
+            email: user.email
+        };
+
+        res.json({ message: '로그인 성공!' });
+    })
 });
 
-app.post('api/logout', (req, res) => {
+
+app.post('api/logout', loginRequired, (req, res) => {
     res.session.destroy(() => {
         res.json({message: '로그아웃 성공!'});
     });
@@ -96,17 +110,17 @@ app.post('/api/registerInput', (req, res) => {
             console.log(err);
             return res.status(500).send('db error');
         }
-        // res.send(`등록완료 username: ${username}, email: ${email}, password: ${password}`);
         console.log(`등록완료 username: ${username}, email: ${email}, password: ${password}`)
     });
 });
 
-app.post('/api/tweetInput', (req, res) => {
+app.post('/api/tweet', loginRequired, (req, res) => {
     const {content} = req.body;
 
     const query = 'INSERT INTO tweet (content, user_id) VALUES (?, ?)';
     db.run(query, [content, req.session.user.id], (err) => {
         if(err){
+            console.error(err.message);
             return res.status(500).json({error: '트윗 작성 실패'});
         }else{
             res.send({message:'작성완료'});
@@ -127,10 +141,19 @@ app.post('/api/like/:tweet_id', loginRequired, (req, res) => {
         }
     });
     
-    const query2 = 'UPDATE tweet SET likes_count = likes_count + 1';
+    const query2 = 'UPDATE tweet SET likes_count = likes_count + 1 WHERE id=?';
     db.run(query2, [tweetId]);
-    
+    res.json({message: '성공'});
 });
+
+app.post('/api/unlike/:tweet_id', loginRequired, (req, res) => {
+    const tweetId = req.params.tweet_id;
+    const query = 'DELETE FROM like WHERE user_id=? AND tweet_id=?';
+    db.run(query, [req.session.user.id, tweetId]);
+    const query2 = 'UPDATE tweet SET likes_count = likes_count - 1 WHERE id=?';
+    db.run(query2, [tweetId]);
+    res.json({message: '성공'});
+})
 
 app.listen(port, () => {
     console.log('server ready');

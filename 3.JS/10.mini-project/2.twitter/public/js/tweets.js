@@ -1,33 +1,30 @@
-document.addEventListener('DOMContentLoaded', async() => {
-    const response = await fetch('/api/tweets');
-    const data = await response.json();
+const tweetBtn = document.getElementById('tweetBtn');
 
-    displayTweets(data);
-});
+tweetBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const content = document.getElementById('content').value;
 
-function displayTweets(tweets){
-    const tweetTableBody = document.querySelector('.tweet');
-    console.log(tweets);
-    tweets.forEach((tweet) => {
-        const row = document.createElement('div');
-        row.className = "tweet-body-row";
-        row.innerHTML = `
-        <p class="tweet-content">${tweet.content}</p>
-        </div>
-        <p class="tweet-author">- ${tweet.user_id} -</p>
-        <div class="tweet-actions">
-        <p id="beforelogin"><a href="/login">Log in to like</a></p>
-        <form id="like" action="/tweet/like/" method="POST">
-        <button type="submit">Like</button>
-        </form>
-        <form id="unlike" action="/tweet/unlike/" method="POST">
-        <button type="submit">Unlike</button>
-        </form>
-        <span class="likes-count">Likes: ${tweet.likes_count}</span>
-        </div></div>
-        `
-        tweetTableBody.appendChild(row);
-        // console.log(tweet);
+    if (!content.trim()) {
+        alert('내용을 입력하세요');
+        return;
+    }
 
+    const res = await fetch('/api/tweet', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({content})
     })
-}
+
+    const data = await res.json();
+    if (res.ok) {
+        showFlash('트윗 작성 완료!', 'success');
+        setTimeout(() => {
+            window.location.href ='/index.html'
+        }, 1000); // 1초 있다가 메인 페이지로 이동
+    } else {
+        showFlash(data.error, 'danger');
+        setTimeout(() => {
+            window.location.href ='/login.html'
+        }, 1000); // 1초 있다가 다시 로그인 페이지로 이동
+    }
+});

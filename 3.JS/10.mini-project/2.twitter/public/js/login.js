@@ -1,59 +1,27 @@
+const loginBtn = document.getElementById('loginBtn');
 
-document.addEventListener('DOMContentLoaded', () =>{
-    checkLoginStatus();
-    document.getElementById('login').addEventListener('click', (e) => {
-        e.preventDefault();
-        login();
-    })
-});
-
-async function checkLoginStatus(){
-    const response = await fetch('/api/check-login');
-    if(response.status === 200){
-        const data = await response.json();
-        showProfile(data.email);
-    }else{
-        const data = await response.json();
-        console.log(data);
-        blindProfile();
-    }
-}
-
-
-async function login(){
-
+loginBtn.addEventListener('click', async () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-
-    const response = await fetch('/api/login', {
+    
+    const res = await fetch('/api/login', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({email, password})
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ email, password })
     });
 
-    if(response.status === 200){
-        const data = await response.json();
-        console.log('로그인성공');
-        // showProfile(data.email);
-        location.href="/home";
-    }else{
-        console.log('로그인실패');
+    if (res.ok) { // res.status_code == 200 인걸 비교하거나, res.ok 가 true/false 라서 이걸 비교하거나..
+        const data = await res.json();
+        showFlash(data.message, 'success');
+        setTimeout(() => {
+            window.location.href ='/index.html'
+        }, 1000); // 1초 있다가 메인으로 이동
+    } else {
+        const data = await res.json();
+        showFlash(data.error, 'danger');
+        setTimeout(() => {
+            window.location.href ='/login.html'
+        }, 1000); // 1초 있다가 다시 로그인 페이지로 이동
     }
-}
 
-function showProfile(){
-    // document.getElementById('useremailSpan').textContent = email;
-    document.getElementById('logoutnav').style.display= 'none';
-    document.getElementById('loginnav').style.display= 'block';
-    document.getElementById('like').style.display='block';
-    document.getElementById('beforelogin').style.display='none';
-}
-
-function blindProfile(){
-    document.getElementById('logoutnav').style.display= 'block';
-    document.getElementById('loginnav').style.display= 'none';
-
-}
-
+});
