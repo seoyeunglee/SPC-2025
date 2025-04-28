@@ -54,7 +54,7 @@ app.post('/api/input', upload.single('image'), (req, res) => {
     db.run(query, [title, message, image], (err) => {
         if(err){
             console.log(err);
-            return res.send(500).send('db error');
+            return res.status(500).send('db error');
         }
         // res.send(`등록완료 title: ${title}, message:${message}. image: ${image}`);
         // res.send('ok');

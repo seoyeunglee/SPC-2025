@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tweet</title>
+    <link rel ="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav id="loginnav">
+        <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/logout">Logout</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/tweet">Tweet</a></li>
+        </ul>
+    </nav>
+    <div class="tweet-form-box">
+        <h2>트윗하기</h2>
+        <form method="POST" action="/api/tweetInput">
+            <!-- <input id="csrf_token" name="csrf_token" type="hidden" value="ImE0MjVkZmI2YmExN2Q3NGM5MjI0MjU4YTQ2Yzg3ZGVmY2NiMjczZTIi.aA7clA.OjvtuMrScB5Jc0h_Qnj8TOVyWl0"> -->
+            <label for="content">트윗</label><br>
+            <textarea class="simple-textarea" id="content" maxlength="280" name="content" required="" rows="2"></textarea><br><br>
+            <button type="submit" class="simple-button">트윗하기</button>
+        </form>
+    </div>
+
+</body>
+</html>

@@ -11,17 +11,18 @@ async function checkLoginStatus(){
     const response = await fetch('/api/check-login');
     if(response.status === 200){
         const data = await response.json();
-        showProfile(data.email);
-    }else{
-        const data = await response.json();
         console.log(data);
+        showProfile();
+        // return data.id;
+    }else{
+        // const data = await response.json();
+        // console.log(data);
         blindProfile();
     }
 }
 
 
 async function login(){
-
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
@@ -36,11 +37,21 @@ async function login(){
     if(response.status === 200){
         const data = await response.json();
         console.log('로그인성공');
-        location.href="/home";
+        // location.href="/home";
+        showFlash(data.message, 'success');
         showProfile();
     }else{
+        const data = await response.json();
         console.log('로그인실패');
+        showFlash(data.error, 'danger');
     }
+}
+
+function showFlash(message, type='success'){
+    const flashDiv = document.getElementById('flash-message');
+    flashDiv.innerHTML = `
+    <li id='mss' class="${type}">${message}</li>
+    `;
 }
 
 function showProfile(){
@@ -77,7 +88,7 @@ function displayTweets(tweets){
         row.innerHTML = `
         <p class="tweet-content">${tweet.content}</p>
         </div>
-        <p class="tweet-author">- ${tweet.user_id} -</p>
+        <p class="tweet-author">- ${tweet.username} -</p>
         <div class="tweet-actions">
         <p id="beforelogin"><a href="/login">Log in to like</a></p>
         <form id="like" action="/tweet/like/" method="POST">
@@ -91,24 +102,57 @@ function displayTweets(tweets){
         `
         tweetTableBody.appendChild(row);
         // console.log(tweet);
-
-    })
+    });
 }
 
 
 ///// register /////
+// document.getElementById('register').addEventListener('click', () => {
+//     registerInput();
+// })
 
 async function registerInput() {
     const username = document.getElementById('username').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    const res = await fetch('/api/registerInput', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, email, password })
-    });
+    const RformData = new FormData();
+    RformData.append('username', username);
+    RformData.append('email', email);
+    RformData.append('password', password);
 
+    try{
+        const res = await fetch('/api/registerInput', {
+            method: 'POST',
+            body: RformData
+        });
+        if(res.ok) location.href('/home');
+    }catch(err){
+        console.log(err.message);
+    }
+    
 }
+
+
+///// tweet /////
+
+async function tweetInput(){
+    const content = document.getElementById('content').value;
+    // const userId = checkLoginStatus();
+    // console.log(userId);
+    
+    try{
+        const res = await fetch('/api/tweetInput', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content })
+        });
+    }catch(err){
+        console.log(err.message);
+    }
+    
+}
+
+
