@@ -130,19 +130,13 @@ app.post('/api/tweet', loginRequired, (req, res) => {
 
 app.post('/api/like/:tweet_id', loginRequired, (req, res) => {
     const tweetId = req.params.tweet_id;
-    const userId = req.session.user_id;
+
     const query = 'INSERT INTO like (user_id, tweet_id) VALUES (?, ?)';
-    
-    db.run(query, [userId, tweetId], (err) => {
-        if(err){
-            return res.status(500).json({error: '오류'});
-        }else{
-            res.send({message: '좋아요 누르기 성공'});
-        }
-    });
-    
-    const query2 = 'UPDATE tweet SET likes_count = likes_count + 1 WHERE id=?';
+    db.run(query, [req.session.user.id, tweetId]);
+
+    const query2 = 'UPDATE tweet SET likes_count = likes_count + 1 WHERE id= ?';
     db.run(query2, [tweetId]);
+
     res.json({message: '성공'});
 });
 
