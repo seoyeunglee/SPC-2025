@@ -87,7 +87,7 @@ app.post('/api/login', (req, res) => {
 
 
 app.post('api/logout', loginRequired, (req, res) => {
-    res.session.destroy(() => {
+    req.session.destroy(() => {
         res.json({message: '로그아웃 성공!'});
     });
 });

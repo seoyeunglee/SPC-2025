@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body class="bg-gray-100">
+    <nav class="bg-white shadow p-4 flex justify-between">
+        <div class="text-2xl font-bold text-blue-400">My App</div>
+        <div class="flex space-x-4">
+            <a href="#" class="text-gray-700 hover:text-blue-500">Home</a>
+            <a href="#" class="text-gray-700 hover:text-blue-500">About</a>
+            <a href="#" class="text-gray-700 hover:text-blue-500">Content</a>
+        </div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-6 text-gray-800">사용자 목록</h1>
+        <button onclick="addUser()"
+            class="bg-blue-500 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded mb-6">사용자 추가</button>
+
+        <div class="bg-white rounded shadow overflow-x-auto">
+
+            <table class="min-w-full text-center">
+                <thead class="bg-gray-200">
+                    <th class="py-3 px-4">ID</th>
+                    <th class="py-3 px-4">이름</th>
+                    <th class="py-3 px-4">이메일</th>
+                    <th class="py-3 px-4">액션</th>
+                </thead>
+                <tbody id="userTableBody">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let user = [
+            { id: 1, name: '홍길동', email: 'hong@example.com' },
+            { id: 2, name: '김철수', email: 'kimg@example.com' },
+
+        ]
+
+        function renderTable() {
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = `
+
+            `;
+
+            users.forEach((user) => {
+                const tr = document.createElement('tr');
+                tr.classList.add('border-b');
+                tr.td = `user-row-${user.id}`;
+                tr.innerHTML = `
+                    <td class="py-3 px-4">${user.id}</td>
+                    <td class="py-3 px-4">${user.name}</td>
+                    <td class="py-3 px-4">${user.email}</td>
+                    <td class="py-3 px-4">
+                        <button onclick="deleteUser(1)"
+                            class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded">수정</button>
+                            class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded">삭제</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+        }
+
+
+        async function addUser() {
+
+            const { value: formValues } = await Swal.fire({
+                title: "로그인",
+                html: `
+                    <input id="swal-input-name" class="swal2-input" placeholder="이름">
+                    <input id="swal-input-email" class="swal2-input" placeholder="이메일" type="email" >
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: '로그인',
+                cancelButtonText: '취소',
+                preConfirm: () => {
+                    const name = document.getElementById('swal-input-name').value;
+                    const email = document.getElementById('swal-input-email').value;
+                    if (!name || !email) {
+                        Swal.showValidationMessage('모든 필드를 입력하세요!');
+                        return false;
+                    }
+
+                    return { name, email };
+                }
+            });
+
+            if (formValues) {
+
+                Swal.fire('사용자 추가 완료!', ` 이름: ${formValues.name} 이메일: ${formValues.email}`, 'success');
+            }
+        }
+
+        function editUser(id) {
+            const user = users.find((user) => user.id === id);
+            
+
+        }
+
+
+        function deleteUser(id) {
+            Swal.fire({
+                title: "정말 삭제하시겠습니까?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "삭제",
+                cancelButtonText: "취소"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    users = users.filter(user => user.id !== id);
+                    renderTable();
+                    Swal.fire({
+                        title: "삭제되었습니다!",
+                        icon: "success"
+                    });
+                }
+            });
+
+        }
+
+        renderTable();
+    </script>
+</body>
+
+</html>
