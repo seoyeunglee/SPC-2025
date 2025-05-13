@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2> {{ grade }}학년 - {{ curriculum_title }} 커리큘럼</h2>
+<p>여기에 영어 대화 및 학습을 시작하세요</p>
+
+<div id="chatbox">
+    <div id="chatlog"></div>
+    <form id="chatForm">
+        <input type="text" id="user_input" name="user_input" placeholder="영어로 대화를 시작하시오..." required>
+        <button type="submit">전송</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('chatForm').addEventListener('submit', function(event){
+        event.preventDefault();
+        const userInput = document.getElementById('user_input').value;
+
+        // 사용자 입력 클리어
+        document.getElementById('user_input').value = '';
+
+        // 백엔드에 요청
+        fetch(window.location.href, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'user_input': userInput
+            })
+        })
+        // TODO. 서버로부터 결과 받아와서 처리하기 
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            const chatlog = document.getElementById('chatlog')
+            chatlog.innerHTML += `<div><strong>학생: </strong> ${userInput} </div>`;
+            chatlog.innerHTML += `<div><strong>영어교사: </strong> ${data.response} </div>`;
+            chatlog.scrollTop = chatLog.scrollHeight;
+        })
+    })
+</script>
+{% endblock %}
