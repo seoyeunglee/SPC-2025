@@ -14,13 +14,15 @@ load_dotenv()
 
 PERSIST_DIR = "./chroma_db"
 COLLECTION_NAME = "my-data"
+DATA_DIR="./DATA"
 store = None
+PROMPT_FILE = "./prompts.json"
 
 # 프롬푸트 코드
 prompt = ChatPromptTemplate.from_template("""
 당신은 문서 기반으로 사용자의 질문에 답변하는 챗봇입니다.
 다음 문서를 참고해서 사용자의 질문에 답하시오.
-각각의 문서는 번호와 유사도를 포함하고 있어, 답변을 말할 때 어떤 문서를 참조했는지도 알려주시오. 
+각각의 문서는 번호와 유사도를 포함하고 있어, 답변을 말할때 어떤 문서를 참조했는지도 알려주시오.
 
 문서:
 {context}
@@ -40,7 +42,35 @@ def initialize_vector_db():
     global store
     
     embeddings = OpenAIEmbeddings()
+    
+    if os.path.isdir(PERSIST_DIR) and os.listdir(PERSIST_DIR):
+        store = Chroma(
+            collection_name=COLLECTION_NAME,
+            embedding_function=embeddings,
+            persist_directory=PERSIST_DIR)
+        print('이전 데이터의 로딩이 완료되었습니다.')
+        return store
+    
+def list_files():
+    files = [f for f in os.listdir(DATA_DIR)
+             if os.path.isfile(os.path.join(DATA_DIR, f))]
+    print(files)
+    return files
 
+def delete_file(file_path):
+    # 1. DB에서 삭제한다
+    # 컬랙션 내에서 해당 파일을 파싱하면서 생긴 데이터를 지워야 하는데...
+    # metadata에 파일명이 잘 저장되어 있어야함... (metadata.source)
+    result = store._collection.delete(where={"source": file_path})
+    ids = result.get("ids", [])
+    print(f"존재하는 문서수: {len(ids)}")
+
+    store._collection.delete(where={"source": file_path})
+
+    # 2. 파일 자체를 삭제한다 
+    path = os.path.join(DATA_DIR, file_path)
+    if os.path.exists(path):
+        os.remove(path)
 
 def create_vector_db(file_path):
     global store
@@ -50,8 +80,7 @@ def create_vector_db(file_path):
 
     print(f"총페이지수: ", len(documents))
 
-    text_splitter = CharacterTextSplitter(
-        separator="\n\n", # 문서 구분할 단위
+    text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000, 
         chunk_overlap=100
     )
@@ -84,9 +113,12 @@ def answer_question(question):
     if store is None:
         return "문서가 업로드 되지 않았습니다. 먼저 PDF를 업로드 해주세요."
     
-    # 점수도 함께 포함해서 가져옴 
+    # 점수도 함께 포함해서 가져옴
     docs_with_score = store.similarity_search_with_score(question, k=5)
-    context = "\n\n".join([doc.page_content for doc in docs_with_score])
+    context = "\n\n".join(
+        [f"[문서 {i+1}] (score {round((1-score)*100,2)}%)\n{doc.page_content}"
+         for i, (doc, score) in enumerate(docs_with_score)]
+    )
     print(docs_with_score)
     
     # 체인 구성
@@ -94,6 +126,21 @@ def answer_question(question):
 
     result = chain.invoke({
         "context": context, "question": question
-    })    
+    })
     
-    return f"질문: {question}\n응답: {result}\n"
+    # 답변 고도화
+    source_lines = []
+    for doc, score in docs_with_score:
+        source = os.path.basename(doc.metadata.get("source", "unknown"))
+        page = int(doc.metadata.get("page", 0)) + 1
+        score_percent = round((1 - score) * 100, 2) # 대충 유사도 계산
+        source_lines.append(f"{source} (page {page}, 유사도 {score_percent}%)")
+    
+    return (
+        f"질문: {question}\n"
+        f"응답: {result}\n"
+        f"관련문서: \n" + "\n".join(f" - {line}" for line in source_lines)
+        # - 문서1.pdf (5pg, 57.23%)
+        # - 문서2.pdf (2pg, 59.23%)
+        # - 문서3.pdf (6pg, 63.23%)
+    )
